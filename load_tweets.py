@@ -34,10 +34,6 @@ def get_id_urls(url, connection):
 
 
 def insert_tweet(connection, tweet):
-    sql = sqlalchemy.sql.text('SELECT id_tweets FROM tweets WHERE id_tweets = :id_tweets')
-    res = connection.execute(sql, {'id_tweets': tweet['id']})
-    if res.first() is not None:
-        return
 
     # insert user url
     if tweet['user']['url'] is None:
@@ -265,7 +261,7 @@ if __name__ == '__main__':
     })
 
     with engine.connect() as connection:
-        connection.execution_options(isolation_level="AUTOCOMMIT")
+        connection = connection.execution_options(isolation_level="AUTOCOMMIT")
         for filename in sorted(args.inputs, reverse=True):
             with zipfile.ZipFile(filename, 'r') as archive:
                 print(datetime.datetime.now(), filename)
